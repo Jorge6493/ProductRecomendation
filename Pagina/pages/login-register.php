@@ -1,3 +1,47 @@
+<?php
+   include("config.php");
+   
+   session_start();
+
+   if(isset($_POST['signIn'])) {
+      // username and password sent from form       
+      $myusername = mysqli_real_escape_string($db,$_POST['username']);
+      $mypassword = mysqli_real_escape_string($db,$_POST['password']); 
+      
+      $sql = "SELECT id FROM usuario WHERE username = '$myusername' and passcode = '$mypassword'";
+      $result = mysqli_query($db,$sql);
+      $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
+
+      
+      $count = mysqli_num_rows($result);
+      
+      // If result matched $myusername and $mypassword, table row must be 1 row
+        
+      if($count == 1) {
+         $_SESSION['login_user'] = $myusername;
+         
+         header("location: valoracion-recomendacion.php");
+      }else {
+         $error = "Your Login Name or Password is invalid";
+      }
+    }
+
+    elseif(isset($_POST['signUP'])) {
+      // username and password sent from form       
+      $myusername = mysqli_real_escape_string($db,$_POST['usernamesignup']);
+      $mypassword = mysqli_real_escape_string($db,$_POST['passwordsignup']); 
+      $myemail    = mysqli_real_escape_string($db,$_POST['emailsignup']); 
+      
+      $sql = "INSERT into usuario (username,passcode,email) values ('$myusername','$mypassword','$myemail')";
+      
+      $result = mysqli_query($db,$sql);
+
+      header("location: ../index.html");
+
+   }
+
+
+?>
 <!DOCTYPE html>
 <!--[if lt IE 7 ]> <html lang="en" class="no-js ie6 lt8"> <![endif]-->
 <!--[if IE 7 ]>    <html lang="en" class="no-js ie7 lt8"> <![endif]-->
@@ -32,7 +76,7 @@
                     <a class="hiddenanchor" id="tologin"></a>
                     <div id="wrapper">
                         <div id="login" class="animate form">
-                            <form  action="mysuperscript.php" autocomplete="on"> 
+                            <form  action="" autocomplete="on" method="POST" > 
                                 <h1>Log in</h1> 
                                 <p> 
                                     <label for="username" class="uname" data-icon="u" > Your email or username </label>
@@ -43,23 +87,22 @@
                                     <input id="password" name="password" required="required" type="password" placeholder="eg. X8df!90EO" /> 
                                 </p>
                                 <p class="keeplogin"> 
-									<input type="checkbox" name="loginkeeping" id="loginkeeping" value="loginkeeping" /> 
-									<label for="loginkeeping">Keep me logged in</label>
-								</p>
+									               <input type="checkbox" name="loginkeeping" id="loginkeeping" value="loginkeeping" /> 
+									               <label for="loginkeeping">Keep me logged in</label>
+								                </p>
                                 <p class="login button"> 
-                                    <input type="submit" value="Login" /> 
-                                    <a href = "main-page.html" class = "login button">
+                                    <input  name="signIn" type="submit" value=" Submit" /> 
+                                    <a href = "#tologin" class = "login button">
 
-								</p>
-                                <p class="change_link">
-									Not a member yet ?
-									<a href="#toregister" class="to_register">Join us</a>
-								</p>
+								                </p>
+                                <p class="change_link">	Not a member yet ?
+									                   <a href="#toregister" class="to_register">Join us</a>
+								                </p>
                             </form>
                         </div>
 
                         <div id="register" class="animate form">
-                            <form  action="mysuperscript.php" autocomplete="on"> 
+                            <form  action="" autocomplete="on" method="post"> 
                                 <h1> Sign up </h1> 
                                 <p> 
                                     <label for="usernamesignup" class="uname" data-icon="u">Your username</label>
@@ -78,11 +121,11 @@
                                     <input id="passwordsignup_confirm" name="passwordsignup_confirm" required="required" type="password" placeholder="eg. X8df!90EO"/>
                                 </p>
                                 <p class="signin button"> 
-									<input type="submit" value="Sign up"/> 
-								</p>
+								              	   <input id="signUP" name = "signUP" type="submit" /> 
+								                </p>
                                 <p class="change_link">  
-									Already a member ?
-									<a href="#tologin" class="to_register"> Go and log in </a>
+									                 Already a member ?
+									               <a href="#tologin" class="to_register"> Go and log in </a>
 
 								</p>
                             </form>

@@ -1,3 +1,40 @@
+<?php
+   include('config.php');
+   session_start();
+   
+   $user_check = $_SESSION['login_user'];
+   
+   $ses_sql = mysqli_query($db,"select username from usuario where username = '$user_check' ");
+   
+   $row = mysqli_fetch_array($ses_sql,MYSQLI_ASSOC);
+   
+   $login_session = $row['username'];
+
+   echo "Username Logged: ".$login_session;
+
+   if(isset($_POST['button1']))
+   {
+
+   	$sql = "select id from usuario where username = '$login_session'";
+   	$result = mysqli_query($db,$sql);
+   	$row = mysqli_fetch_array($ses_sql,MYSQLI_ASSOC);
+   	$idUsuario = $row['id'];
+
+
+   	$sql = "insert into ";
+   	$result = mysqli_query($db,$sql);
+
+
+
+   }
+
+
+   
+   if(!isset($_SESSION['login_user'])){
+      header("location:login-register.php");
+   }
+?>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <!--
 Template Name: PhotoProwess
@@ -26,36 +63,33 @@ Licence URI: http://www.os-templates.com/template-terms
   </div>
 </div>
 <!-- ####################################################################################################### -->   
-<div>
-<h5>Nombre de Usuario: </h5>
-<h5>Correo: </h5>
-<h5><center>Recomendaciones:</center></h5>
 
-</div>
 <div class="wrapper col4">
   <div id="container" class="clear"> 
   <!-- Pelicula 1 -->
   <img src="../images/movies/pelicula1.gif" width="200" height="300"> 
-    <form action="demo_form.asp">
-            <input type="text" name="fname" ><input type="submit" value="Valorar"> 
+    <form action="demo_form.asp" method="POST"> 
+            <input for = "button1" type="text" name="movie1" id="movie1" >
+            <input name = "button1" id = "button1" type="submit" value="Valorar" > 
     </form>
 <br>
 
   <!-- Pelicula 2 -->
    <img src="../images/movies/pelicula2.jpg" width="200" height="300">
-    <form action="demo_form.asp">
-            <input type="text" name="fname" > <input type="submit" value="Valorar" > 
+    <form action="demo_form.asp"  method="POST">
+            <input for = "button2" type="text" name="movie2" >
+             <input name = "button2" id = "button2" type="submit" value="Valorar" > 
     </form>
 <br>
   <!-- Pelicula 3 -->
    <img src="../images/movies/pelicula3.jpg" width="200" height="300" >
-    <form action="demo_form.asp">
-            <input type="text" name="fname" ><input type="submit" value="Valorar" > 
+    <form action="demo_form.asp"  method="POST">
+            <input for = "button3" type="text" name="movie3" >
+            <input name = "button3" id = "button2" type="submit" value="Valorar" > 
     </form>
 
   </div>
 </div>
-<!-- ####################################################################################################### -->
 <!-- ####################################################################################################### -->
 <div class="wrapper">
   <div id="copyright" class="clear">
