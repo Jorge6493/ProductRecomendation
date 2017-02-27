@@ -6,9 +6,9 @@
    if(isset($_POST['signIn'])) {
       // username and password sent from form       
       $myusername = mysqli_real_escape_string($db,$_POST['username']);
-      $mypassword = mysqli_real_escape_string($db,$_POST['password']); 
+      $mypassword = mysqli_real_escape_string($db,$_POST['password']);
       
-      $sql = "SELECT id FROM usuario WHERE username = '$myusername' and passcode = '$mypassword'";
+      $sql = "SELECT UserName FROM Users WHERE UserName = '$myusername' and UserPass = '$mypassword'";
       $result = mysqli_query($db,$sql);
       $row = mysqli_fetch_array($result,MYSQLI_ASSOC);
 
@@ -32,7 +32,7 @@
       $mypassword = mysqli_real_escape_string($db,$_POST['passwordsignup']); 
       $myemail    = mysqli_real_escape_string($db,$_POST['emailsignup']); 
       
-      $sql = "INSERT into usuario (username,passcode,email) values ('$myusername','$mypassword','$myemail')";
+      $sql = "INSERT into Users (UserName,UserPass,UserEmail) values ('$myusername','$mypassword','$myemail')";
       
       $result = mysqli_query($db,$sql);
 

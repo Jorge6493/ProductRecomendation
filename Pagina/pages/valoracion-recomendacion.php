@@ -4,35 +4,61 @@
    
    $user_check = $_SESSION['login_user'];
    
-   $ses_sql = mysqli_query($db,"select username from usuario where username = '$user_check' ");
+   $ses_sql = mysqli_query($db,"select $cmUserName,$cmUserID from $tbUsers where $cmUserName = '$user_check' ");
    
    $row = mysqli_fetch_array($ses_sql,MYSQLI_ASSOC);
    
-   $login_session = $row['username'];
+   $login_session = $row[$cmUserName];
+   $idUsuario = (int)$row[$cmUserID];
 
    echo "Username Logged: ".$login_session;
+   echo " Pelicula: $idPelicula";
 
-   if(isset($_POST['button1']))
-   {
-
-   	$sql = "select id from usuario where username = '$login_session'";
-   	$result = mysqli_query($db,$sql);
-   	$row = mysqli_fetch_array($ses_sql,MYSQLI_ASSOC);
-   	$idUsuario = $row['id'];
-
-
-   	$sql = "insert into ";
-   	$result = mysqli_query($db,$sql);
-
-
-
-   }
-
-
-   
    if(!isset($_SESSION['login_user'])){
       header("location:login-register.php");
    }
+
+   //Funcion para dar mensajes en la consola del browser
+   function debug_to_console( $data ) {
+
+    if ( is_array( $data ) )
+        $output = "<script>console.log( 'Debug Objects: " . implode( ',', $data) . "' );</script>";
+    else
+        $output = "<script>console.log( 'Debug Objects: " . $data . "' );</script>";
+
+    echo $output;
+  }
+  
+  //Select box
+  $get=mysqli_query($db,"SELECT $cmMovieTitle FROM $tbMovies");
+  $option = '';
+ while($row = mysqli_fetch_assoc($get))
+  {
+  	$option .= '<option value = "'.$row[$cmMovieTitle].'">'.$row[$cmMovieTitle].'</option>';
+  }
+  
+  //enviar el valor
+  if(isset($_POST['button1']))
+  {
+  	//Obtener el string de la pelicula
+  	$pelicula =$_POST['selectList'];
+  	
+  	$valor = $_POST['Rating'];
+  	//Busqueda y ejecucion para obtener el ID de la pelicula
+  	$sql = mysqli_query($db,"SELECT $cmMovieID from $tbMovies where $cmMovieTitle = '$pelicula'");
+  	$row = mysqli_fetch_array($sql,MYSQLI_ASSOC);
+  	$idPelicula = (int)$row[$cmMovieID];
+  	
+  	//insertar a la base de datos
+  	$sql = "INSERT into $tbRatings($cmUserID,$cmMovieID,$cmRating) values ($idUsuario,$idPelicula,$valor)";/*$idUsuario*/
+  	$ins = mysqli_query($db,$sql);
+  	
+  }
+  
+  
+
+
+
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -66,27 +92,27 @@ Licence URI: http://www.os-templates.com/template-terms
 
 <div class="wrapper col4">
   <div id="container" class="clear"> 
-  <!-- Pelicula 1 -->
-  <img src="../images/movies/pelicula1.gif" width="200" height="300"> 
-    <form action="demo_form.asp" method="POST"> 
-            <input for = "button1" type="text" name="movie1" id="movie1" >
-            <input name = "button1" id = "button1" type="submit" value="Valorar" > 
-    </form>
-<br>
+  <!-- Pelicula 1
+  <img src="../images/movies/pelicula1.gif" width="200" height="300"> -->
+    <form action="valoracion-recomendacion.php" method=post>
+    Peliculas :<select id = "selectList" name="selectList">
+	<?php echo $option; ?>
+	</select>
+	<br />
+	<br />
+            <!--<input for = "button1" type="text" name="movie1" id="movie1" > textfield-->
+            <select name="Rating"><!-- Select Box-->
+              <option selected>Select...</option>
+              <option value="5">5</option>
+              <option value="4">4</option>
+              <option value="3">3</option>
+              <option value="2">2</option>
+              <option value="1">1</option>
+            </select>
+            <input name = "button1" id = "button1" type="submit" value="Valorar" >
+            <?php 
 
-  <!-- Pelicula 2 -->
-   <img src="../images/movies/pelicula2.jpg" width="200" height="300">
-    <form action="demo_form.asp"  method="POST">
-            <input for = "button2" type="text" name="movie2" >
-             <input name = "button2" id = "button2" type="submit" value="Valorar" > 
-    </form>
-<br>
-  <!-- Pelicula 3 -->
-   <img src="../images/movies/pelicula3.jpg" width="200" height="300" >
-    <form action="demo_form.asp"  method="POST">
-            <input for = "button3" type="text" name="movie3" >
-            <input name = "button3" id = "button2" type="submit" value="Valorar" > 
-    </form>
+            ?>
 
   </div>
 </div>
