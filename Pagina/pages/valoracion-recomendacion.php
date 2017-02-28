@@ -12,7 +12,7 @@
    $idUsuario = (int)$row[$cmUserID];
 
    echo "Username Logged: ".$login_session;
-   echo " Pelicula: $idPelicula";
+   //echo " Pelicula: $idPelicula";
 
    if(!isset($_SESSION['login_user'])){
       header("location:login-register.php");
@@ -55,10 +55,9 @@
   	
   }
   
+  $queryRecommendation = "SELECT $cmMovieID,$cmRating FROM $tbRatings"; //You don't need a ; like you do in SQL
+  $sqlRecommendation = mysqli_query($db,$queryRecommendation);
   
-
-
-
 ?>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -72,6 +71,11 @@ Licence URI: http://www.os-templates.com/template-terms
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <title>Trinitarias Films</title>
+<style>
+table, th, td {
+    border: 1px solid black;
+}
+</style>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <link rel="stylesheet" href="../layout/styles/layout.css" type="text/css" />
 <script type="text/javascript" src="../layout/scripts/jquery.min.js"></script>
@@ -113,6 +117,23 @@ Licence URI: http://www.os-templates.com/template-terms
             <?php 
 
             ?>
+    <br />
+	<br />
+            
+<!-- Display de la tabla -->
+<table style="width:100%">
+	<tr>
+		<th>MovieID</th>
+		<th>Rating</th>
+	</tr>
+	<?php 
+	while($row = mysqli_fetch_array($sqlRecommendation,MYSQLI_ASSOC))
+	{   //Creates a loop to loop through results
+		echo "<tr><td>" . $row[$cmMovieID] . "</td><td>" . $row[$cmRating] . "</td></tr>";  //$row['index'] the index here is a field name
+	} 
+	?>
+
+</table>
 
   </div>
 </div>
@@ -123,4 +144,8 @@ Licence URI: http://www.os-templates.com/template-terms
   </div>
 </div>
 </body>
+<?php 
+	//print ("hola2 \n");
+	mysqli_close(); //Make sure to close out the database connection 
+?>
 </html>

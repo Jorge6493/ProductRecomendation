@@ -29,4 +29,9 @@
 	
 	$tbRatings = tbRatings;
 	$cmRating = cmRating;
+	/*
+	 * $cmUserID
+	 * $cmMovieID
+	
+	*/
 ?>
